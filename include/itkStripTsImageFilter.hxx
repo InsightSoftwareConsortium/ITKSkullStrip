@@ -21,6 +21,7 @@
 #define __itkStripTsImageFilter_hxx
 
 #include "itkStripTsImageFilter.h"
+#include "itkLabelImageGaussianInterpolateImageFunction.h"
 
 namespace itk
 {
@@ -33,6 +34,14 @@ StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   m_PatientImage = ImageType::New();
   m_AtlasImage = AtlasImageType::New();
   m_AtlasLabels = AtlasLabelType::New();
+  m_Progress = ProgressAccumulator::New();
+  m_TimerReport = "";
+}
+
+template <class TImageType, class TAtlasImageType, class TAtlasLabelType>
+StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
+::~StripTsImageFilter()
+{
 }
 
 
@@ -42,16 +51,41 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 {
   // do the processing
 
+  m_Progress->ResetProgress();
+  m_Progress->SetMiniPipelineFilter(this);
+
+  m_Timer.Start("1 DownsampleImage");
   this->DownsampleImage();
+  m_Timer.Stop("1 DownsampleImage");
+
+  m_Timer.Start("2 RescaleImages");
   this->RescaleImages();
+  m_Timer.Stop("2 RescaleImages");
 
+  m_Timer.Start("3 RigidRegistration");
   this->RigidRegistration();
+  m_Timer.Stop("3 RigidRegistration");
+
+  m_Timer.Start("4 AffineRegistration");
   this->AffineRegistration();
+  m_Timer.Stop("4 AffineRegistration");
+
+  m_Timer.Start("5 BinaryErosion");
   this->BinaryErosion();
+  m_Timer.Stop("5 BinaryErosion");
 
+  m_Timer.Start("6 MultiResLevelSet");
   this->MultiResLevelSet();
+  m_Timer.Stop("6 MultiResLevelSet");
 
+  m_Timer.Start("7 UpsampleLabels");
   this->UpsampleLabels();
+  m_Timer.Stop("7 UpsampleLabels");
+
+  std::ostringstream report;
+
+  m_Timer.Report(report);
+  m_TimerReport = report.str();
 
   this->GraftOutput(m_AtlasLabels );
 }
@@ -130,6 +164,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(resampler, 0.004f);
     resampler->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -165,6 +200,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(atlasRescaler, 0.001f);
     imageRescaler->Update();
     atlasRescaler->Update();
     }
@@ -188,7 +224,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 {
   // perform intial rigid alignment of atlas with patient image
 
-  //std::cout << "Doing initial rigid mask alignment" << std::endl;
+//  std::cout << "Doing initial rigid mask alignment" << std::endl;
 
   typedef itk::VersorRigid3DTransform<double> TransformType;
   typedef itk::VersorRigid3DTransformOptimizer OptimizerType;
@@ -196,6 +232,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   typedef itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType> MultiResRegistrationType;
   typedef itk::LinearInterpolateImageFunction<TAtlasImageType, double> LinearInterpolatorType;
   typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double> NNInterpolatorType;
+//  typedef itk::LabelImageGaussianInterpolateImageFunction<TAtlasLabelType, double> NNInterpolatorType;
 
   typename TransformType::Pointer  transform = TransformType::New();
   typename OptimizerType::Pointer optimizer = OptimizerType::New();
@@ -268,6 +305,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(registration, 0.29f);
     registration->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -301,6 +339,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   imageResampler->SetInput( m_AtlasImage );
   try
     {
+    m_Progress->RegisterInternalFilter(imageResampler, 0.24f);
     imageResampler->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -328,6 +367,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   labelResampler->SetInput( m_AtlasLabels );
   try
     {
+    m_Progress->RegisterInternalFilter(labelResampler, 0.01f);
     labelResampler->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -347,7 +387,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 {
   // perform refined affine alignment of atlas with patient image
 
-  //std::cout << "Doing affine mask alignment" << std::endl;
+//  std::cout << "Doing affine mask alignment" << std::endl;
 
   typedef itk::AffineTransform<double,3> TransformType;
   typedef itk::RegularStepGradientDescentOptimizer OptimizerType;
@@ -414,6 +454,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(registration, 0.24f);
     registration->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -447,6 +488,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   imageResampler->SetInput( m_AtlasImage );
   try
     {
+    m_Progress->RegisterInternalFilter(imageResampler, 0.01f);
     imageResampler->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -474,6 +516,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   labelResampler->SetInput( m_AtlasLabels );
   try
     {
+    m_Progress->RegisterInternalFilter(labelResampler, 0.01f);
     labelResampler->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -491,7 +534,7 @@ template <class TImageType, class TAtlasImageType, class TAtlasLabelType>
 void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 ::BinaryErosion()
 {
-  // std::cout << "Eroding aligned mask" << std::endl;
+//  std::cout << "Eroding aligned mask" << std::endl;
 
   // make sure mask is binary
   itk::ImageRegionIterator<AtlasLabelType> iterLabel(m_AtlasLabels, m_AtlasLabels->GetLargestPossibleRegion() );
@@ -511,6 +554,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   typename ErodeFilterType::Pointer eroder = ErodeFilterType::New();
 
   structuringElement.SetRadius( 3 );
+  structuringElement.SetRadius( 3 );
   structuringElement.CreateStructuringElement();
 
   eroder->SetKernel( structuringElement );
@@ -520,6 +564,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(eroder, 0.02f);
     eroder->Update();
     }
   catch( itk::ExceptionObject &err )
@@ -539,15 +584,15 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 {
   // level set refinement of brain mask in two resolution levels
 
-  //std::cout << "Level set refinement of brain mask" << std::endl;
+//  std::cout << "Level set refinement of brain mask" << std::endl;
 
   // coarse (2mm isotropic resolution)
-  //std::cout << "...coarse" << std::endl;
+//  std::cout << "...coarse" << std::endl;
   PyramidFilter(2);
   LevelSetRefinement(2);
 
   // fine (1mm isotropic resolution)
-  //std::cout << "...fine" << std::endl;
+//  std::cout << "...fine" << std::endl;
   PyramidFilter(1);
   LevelSetRefinement(1);
 }
@@ -592,6 +637,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(imageResampler, 0.01f);
     imageResampler->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -627,6 +673,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(labelResampler, 0.01f);
     labelResampler->Update();
     }
   catch( itk::ExceptionObject &exception )
@@ -741,6 +788,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   thresholder->SetInput( geodesicActiveContour->GetOutput() );
   try
     {
+    m_Progress->RegisterInternalFilter(thresholder, 0.01f);
     thresholder->Update();
     }
   catch( itk::ExceptionObject & excep )
@@ -776,7 +824,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 {
   // upsample atlas label image to original resolution
 
-  //std::cout << "Generating final brain mask" << std::endl;
+//  std::cout << "Generating final brain mask" << std::endl;
 
   typedef itk::ResampleImageFilter<TAtlasLabelType, TAtlasLabelType> ResamplerType;
   typename ResamplerType::Pointer resampler = ResamplerType::New();
@@ -801,6 +849,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   try
     {
+    m_Progress->RegisterInternalFilter(resampler, 0.01f);
     resampler->Update();
     }
   catch( itk::ExceptionObject &exception )

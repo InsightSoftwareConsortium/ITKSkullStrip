@@ -47,6 +47,8 @@
 #include "itkGeodesicActiveContourLevelSetImageFilter.h"
 #include "itkCastImageFilter.h"
 
+#include "itkTimeProbesCollectorBase.h"
+#include "itkProgressAccumulator.h"
 
 namespace itk
 {
@@ -120,14 +122,20 @@ public:
   typedef typename AtlasLabelType::Pointer      AtlasLabelPointer;
   typedef typename AtlasLabelType::ConstPointer AtlasLabelConstPointer;
 
+  typedef typename ProgressAccumulator::Pointer ProgressPointer;
+
   void SetAtlasImage( const TAtlasImageType * ptr );
   void SetAtlasBrainMask( const TAtlasLabelType * ptr );
 
+  const std::string &GetTimerReport() const
+  {
+    return m_TimerReport;
+  }
 
 protected:
 
   StripTsImageFilter();
-  ~StripTsImageFilter(){}
+  ~StripTsImageFilter();
 
   // does the real work
   virtual void GenerateData();
@@ -138,9 +146,12 @@ private:
   StripTsImageFilter(const Self&); //purposely not implemented
   void operator=(const Self&); //purposely not implemented
 
-  ImagePointer      m_PatientImage;
-  AtlasImagePointer m_AtlasImage;
-  AtlasLabelPointer m_AtlasLabels;
+  ImagePointer            m_PatientImage;
+  AtlasImagePointer       m_AtlasImage;
+  AtlasLabelPointer       m_AtlasLabels;
+  ProgressPointer         m_Progress;
+  TimeProbesCollectorBase m_Timer;
+  std::string             m_TimerReport;
 
   void RescaleImages();
   void DownsampleImage();
