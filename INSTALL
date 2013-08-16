@@ -8,10 +8,11 @@ To build SkullStrip as an ITKv4 Remote module:
 A) If you use an interactive cmake (ccmake, cmake-gui or cmakesetup)
 --------------------------------------------------------------------
 * Configure
-  1) Go to your itk build diectory and run cmake
+  1) Go to your itk build directory and run cmake
   2) Configure
 
-* Fetch SkullStrip
+* NOTE: for ITK 4.4 and earlier only
+  Fetch SkullStrip
   1) Open the highlighted (red) cmake entry
   2) Check the Fetch_SkullStrip box
   3) Configure
@@ -19,7 +20,7 @@ A) If you use an interactive cmake (ccmake, cmake-gui or cmakesetup)
 * Enable SkullStrip
   1) Configure (yes, do it again)
   2) Open the highlighted (red) cmake entry
-  3) Check the Module_ITKSkullStrip box
+  3) Check the Module_SkullStrip box
   4) Configure
   5) Generate
   6) Exit cmake
@@ -28,8 +29,9 @@ B) If you use cmake from the command line
 --------------------------------------
 From your itk build directory
 * Configure
-  1) cmake -DFetch_SkullStrip=ON YOUR_ITK_SOURCE_DIR
-  2) cmake -DModule_ITKSkullStrip=ON YOUR_ITK_SOURCE_DIR
+  1) NOTE: for ITK 4.4 and earlier only
+     cmake -DFetch_SkullStrip=ON YOUR_ITK_SOURCE_DIR
+  2) cmake -DModule_SkullStrip=ON YOUR_ITK_SOURCE_DIR
 
 Once you have configured using A) or B)
 ---------------------------------------
@@ -39,4 +41,3 @@ Once you have configured using A) or B)
 
 * Test SkullStrip if testing is on
   1) ctest -V -R SkullStrip
-2
