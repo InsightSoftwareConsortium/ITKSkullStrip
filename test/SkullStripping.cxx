@@ -157,7 +157,9 @@ int main( int argc, char* argv[] )
 
 
   double endTime = time(0);
-  std::cout << "Total computation time: " << endTime-startTime << "seconds " << std::endl;
+  std::cout << "Total computation time: "
+            << endTime-startTime << " seconds" << std::endl;
+  std::cout << stripTsFilter->GetTimerReport();
 
 
   return EXIT_SUCCESS;

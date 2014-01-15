@@ -86,6 +86,8 @@ namespace itk
  *    Stefan Bauer, Lutz-Peter Nolte, and Mauricio Reyes.
  *    In Annual Meeting of the Swiss Society for Biomedical
  *    Engineering, page 2, Bern, April 2011..
+ *
+ * \ingroup Segmentation
  */
 
 template <class TImageType, class TAtlasImageType, class TAtlasLabelType>
