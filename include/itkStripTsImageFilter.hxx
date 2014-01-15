@@ -638,9 +638,9 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   try
     {
     m_Progress->RegisterInternalFilter(imageResampler, 0.01f);
-    m_Timer.Start("6 LevelSet a) Image Resampler");
+    m_Timer.Start("6a) Image Resampler");
     imageResampler->Update();
-    m_Timer.Stop("6 LevelSet a) Image Resampler");
+    m_Timer.Stop("6a) Image Resampler");
     }
   catch( itk::ExceptionObject &exception )
     {
@@ -676,9 +676,9 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   try
     {
     m_Progress->RegisterInternalFilter(labelResampler, 0.01f);
-    m_Timer.Start("6 LevelSet b) Label Resampler");
+    m_Timer.Start("6b) Label Resampler");
     labelResampler->Update();
-    m_Timer.Stop("6 LevelSet b) Label Resampler");
+    m_Timer.Stop("6b) Label Resampler");
     }
   catch( itk::ExceptionObject &exception )
     {
@@ -710,12 +710,12 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   labelCaster->SetInput(m_AtlasLabels);
   try
     {
-    m_Timer.Start("6 LevelSet c) Image Caster");
+    m_Timer.Start("6c) Image Caster");
     imageCaster->Update();
-    m_Timer.Stop("6 LevelSet c) Image Caster");
-    m_Timer.Start("6 LevelSet d) Label Caster");
+    m_Timer.Stop("6c) Image Caster");
+    m_Timer.Start("6d) Label Caster");
     labelCaster->Update();
-    m_Timer.Stop("6 LevelSet d) Label Caster");
+    m_Timer.Stop("6d) Label Caster");
     }
   catch( itk::ExceptionObject & excep )
     {
@@ -775,31 +775,31 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
     geodesicActiveContour->SetNumberOfIterations( 120 );
     }
 
-  m_Timer.Start("6 LevelSet e) Gradient Anisotropic Diffusion");
+  m_Timer.Start("6e) Gradient AD");
   smoothingFilter->SetInput( imageCaster->GetOutput() );
   smoothingFilter->Update();
-  m_Timer.Stop("6 LevelSet e) Gradient Anisotropic Diffusion");
+  m_Timer.Stop("6e) Gradient AD");
 
-  m_Timer.Start("6 LevelSet f) Gradient Magnitude");
+  m_Timer.Start("6f) Gradient Mag");
   gradientMagnitude->SetInput( smoothingFilter->GetOutput() );
   gradientMagnitude->Update();
-  m_Timer.Stop("6 LevelSet f) Gradient Magnitude");
+  m_Timer.Stop("6f) Gradient Mag");
 
-  m_Timer.Start("6 LevelSet g) Rescaler");
+  m_Timer.Start("6g) Rescaler");
   rescaler->SetInput( gradientMagnitude->GetOutput() );
   rescaler->Update();
-  m_Timer.Stop("6 LevelSet g) Rescaler");
+  m_Timer.Stop("6g) Rescaler");
 
-  m_Timer.Start("6 LevelSet h) Sigmoid");
+  m_Timer.Start("6h) Sigmoid");
   sigmoid->SetInput( rescaler->GetOutput() );
   sigmoid->Update();
-  m_Timer.Stop("6 LevelSet h) Sigmoid");
+  m_Timer.Stop("6h) Sigmoid");
 
-  m_Timer.Start("6 LevelSet i) Geodesic");
+  m_Timer.Start("6i) Geodesic");
   geodesicActiveContour->SetInput( labelCaster->GetOutput() );
   geodesicActiveContour->SetFeatureImage( sigmoid->GetOutput() );
   geodesicActiveContour->Update();
-  m_Timer.Stop("6 LevelSet i) Geodesic");
+  m_Timer.Stop("6i) Geodesic");
 
   // threshold level set output
   typedef itk::BinaryThresholdImageFilter<FloatImageType, FloatImageType> ThresholdFilterType;
@@ -814,9 +814,9 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   try
     {
     m_Progress->RegisterInternalFilter(thresholder, 0.01f);
-    m_Timer.Start("6 LevelSet j) Thresholder");
+    m_Timer.Start("6j) Thresholder");
     thresholder->Update();
-    m_Timer.Stop("6 LevelSet j) Thresholder");
+    m_Timer.Stop("6j) Thresholder");
     }
   catch( itk::ExceptionObject & excep )
     {
@@ -832,9 +832,9 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   labelReCaster->SetInput(thresholder->GetOutput());
   try
     {
-    m_Timer.Start("6 LevelSet k) Label Caster");
+    m_Timer.Start("6k) Label Caster");
     labelReCaster->Update();
-    m_Timer.Stop("6 LevelSet k) Label Caster");
+    m_Timer.Stop("6k) Label Caster");
     }
   catch( itk::ExceptionObject & excep )
     {
