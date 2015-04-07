@@ -17,8 +17,8 @@
  *=========================================================================*/
 
 
-#ifndef __itkStripTsImageFilter_hxx
-#define __itkStripTsImageFilter_hxx
+#ifndef itkStripTsImageFilter_hxx
+#define itkStripTsImageFilter_hxx
 
 #include "itkStripTsImageFilter.h"
 #include "itkLabelImageGaussianInterpolateImageFunction.h"
@@ -226,12 +226,16 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
 //  std::cout << "Doing initial rigid mask alignment" << std::endl;
 
-  typedef itk::VersorRigid3DTransform<double> TransformType;
+  typedef itk::VersorRigid3DTransform<double>  TransformType;
   typedef itk::VersorRigid3DTransformOptimizer OptimizerType;
-  typedef itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType> MetricType;
-  typedef itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType> MultiResRegistrationType;
-  typedef itk::LinearInterpolateImageFunction<TAtlasImageType, double> LinearInterpolatorType;
-  typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double> NNInterpolatorType;
+  typedef itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType>
+                                               MetricType;
+  typedef itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType>
+                                               MultiResRegistrationType;
+  typedef itk::LinearInterpolateImageFunction<TAtlasImageType, double>
+                                               LinearInterpolatorType;
+  typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double>
+                                               NNInterpolatorType;
 //  typedef itk::LabelImageGaussianInterpolateImageFunction<TAtlasLabelType, double> NNInterpolatorType;
 
   typename TransformType::Pointer  transform = TransformType::New();
@@ -389,12 +393,16 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
 //  std::cout << "Doing affine mask alignment" << std::endl;
 
-  typedef itk::AffineTransform<double,3> TransformType;
+  typedef itk::AffineTransform<double,3>           TransformType;
   typedef itk::RegularStepGradientDescentOptimizer OptimizerType;
-  typedef itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType> MetricType;
-  typedef itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType> MultiResRegistrationType;
-  typedef itk::LinearInterpolateImageFunction<TAtlasImageType, double> LinearInterpolatorType;
-  typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double> NNInterpolatorType;
+  typedef itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType>
+                                                    MetricType;
+  typedef itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType>
+                                                    MultiResRegistrationType;
+  typedef itk::LinearInterpolateImageFunction<TAtlasImageType, double>
+                                                    LinearInterpolatorType;
+  typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double>
+                                                    NNInterpolatorType;
 
   typename TransformType::Pointer  transform = TransformType::New();
   typename OptimizerType::Pointer optimizer = OptimizerType::New();

@@ -17,9 +17,8 @@
  *=========================================================================*/
 
 
-#ifndef __itkStripTsImageFilter_h
-#define __itkStripTsImageFilter_h
-
+#ifndef itkStripTsImageFilter_h
+#define itkStripTsImageFilter_h
 
 #include "itkImageToImageFilter.h"
 

@@ -55,13 +55,13 @@ int main( int argc, char* argv[] )
   std::string atlasImageFilename = argv[2];
   std::string atlasMaskFilename = argv[3];
 
-  typedef itk::Image<int, 3> ImageType;
-  typedef itk::Image<short, 3> AtlasImageType;
+  typedef itk::Image<int, 3>           ImageType;
+  typedef itk::Image<short, 3>         AtlasImageType;
   typedef itk::Image<unsigned char, 3> AtlasLabelType;
 
 
   // image reading
-  typedef itk::ImageFileReader<ImageType> ReaderType;
+  typedef itk::ImageFileReader<ImageType>      ReaderType;
   typedef itk::ImageFileReader<AtlasImageType> AtlasReaderType;
   typedef itk::ImageFileReader<AtlasLabelType> LabelReaderType;
   ReaderType::Pointer reader = ReaderType::New();
