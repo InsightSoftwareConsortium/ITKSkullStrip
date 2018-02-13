@@ -96,11 +96,11 @@ StripTsImageFilter : public ImageToImageFilter<TImageType, TAtlasLabelType>
 {
 public:
 
-  // standard class typedefs
-  typedef StripTsImageFilter                              Self;
-  typedef ImageToImageFilter<TImageType,TAtlasLabelType>  Superclass;
-  typedef SmartPointer<Self>                              Pointer;
-  typedef SmartPointer<const Self>                        ConstPointer;
+  // standard class type alias
+  using Self = StripTsImageFilter;
+  using Superclass = ImageToImageFilter<TImageType,TAtlasLabelType>;
+  using Pointer = SmartPointer<Self>;
+  using ConstPointer = SmartPointer<const Self>;
 
   // method for creation through the object factory
   itkNewMacro(Self);
@@ -112,19 +112,19 @@ public:
   void PrintSelf( std::ostream& os, Indent indent ) const;
 
   // image and label templates
-  typedef TImageType                        ImageType;
-  typedef typename ImageType::Pointer       ImagePointer;
-  typedef typename ImageType::ConstPointer  ImageConstPointer;
+  using ImageType = TImageType;
+  using ImagePointer = typename ImageType::Pointer;
+  using ImageConstPointer = typename ImageType::ConstPointer;
 
-  typedef TAtlasImageType                       AtlasImageType;
-  typedef typename AtlasImageType::Pointer      AtlasImagePointer;
-  typedef typename AtlasImageType::ConstPointer AtlasImageConstPointer;
+  using AtlasImageType = TAtlasImageType;
+  using AtlasImagePointer = typename AtlasImageType::Pointer;
+  using AtlasImageConstPointer = typename AtlasImageType::ConstPointer;
 
-  typedef TAtlasLabelType                       AtlasLabelType;
-  typedef typename AtlasLabelType::Pointer      AtlasLabelPointer;
-  typedef typename AtlasLabelType::ConstPointer AtlasLabelConstPointer;
+  using AtlasLabelType = TAtlasLabelType;
+  using AtlasLabelPointer = typename AtlasLabelType::Pointer;
+  using AtlasLabelConstPointer = typename AtlasLabelType::ConstPointer;
 
-  typedef typename ProgressAccumulator::Pointer ProgressPointer;
+  using ProgressPointer = typename ProgressAccumulator::Pointer;
 
   void SetAtlasImage( const TAtlasImageType * ptr );
   void SetAtlasBrainMask( const TAtlasLabelType * ptr );
