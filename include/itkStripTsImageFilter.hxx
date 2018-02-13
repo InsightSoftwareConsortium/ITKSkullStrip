@@ -287,7 +287,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   using OptimizerScalesType = OptimizerType::ScalesType;
   OptimizerScalesType optimizerScales( transform->GetNumberOfParameters() );
-  const double scale = 1.0;
+  constexpr double scale = 1.0;
   const double translationScale = scale/2500;
 
   optimizerScales[0] = scale;
@@ -430,7 +430,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   using OptimizerScalesType = OptimizerType::ScalesType;
   OptimizerScalesType optimizerScales( transform->GetNumberOfParameters() );
-  const double matrixScale = 1.0;
+  constexpr double matrixScale = 1.0;
   const double translationScale = matrixScale/200;
 
   optimizerScales[0] = matrixScale;
