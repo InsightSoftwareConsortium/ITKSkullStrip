@@ -126,7 +126,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   // resample patient image to isotropic resolution
 
   // duplicate image
-  typedef itk::ImageDuplicator<TImageType> DuplicatorType;
+  using DuplicatorType = itk::ImageDuplicator<TImageType>;
   typename DuplicatorType::Pointer duplicator = DuplicatorType::New();
   duplicator->SetInputImage( this->GetInput() );
   duplicator->Update();
@@ -134,13 +134,13 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   m_PatientImage->DisconnectPipeline();
 
   // resample image
-  typedef itk::ResampleImageFilter<TImageType, TImageType> ResamplerType;
+  using ResamplerType = itk::ResampleImageFilter<TImageType, TImageType>;
   typename ResamplerType::Pointer resampler = ResamplerType::New();
 
-  typedef itk::IdentityTransform<double, 3> TransformType;
+  using TransformType = itk::IdentityTransform<double, 3>;
   typename TransformType::Pointer transform = TransformType::New();
 
-  typedef itk::LinearInterpolateImageFunction<TImageType, double> LinearInterpolatorType;
+  using LinearInterpolatorType = itk::LinearInterpolateImageFunction<TImageType, double>;
   typename LinearInterpolatorType::Pointer lInterp = LinearInterpolatorType::New();
 
   transform->SetIdentity();
@@ -184,10 +184,10 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 {
   // rescale patient image and atlas image intensities to 0-255
 
-  typedef itk::RescaleIntensityImageFilter<TImageType, TImageType> ImageRescalerType;
+  using ImageRescalerType = itk::RescaleIntensityImageFilter<TImageType, TImageType>;
   typename ImageRescalerType::Pointer imageRescaler = ImageRescalerType::New();
 
-  typedef itk::RescaleIntensityImageFilter<TAtlasImageType, TAtlasImageType> AtlasRescalerType;
+  using AtlasRescalerType = itk::RescaleIntensityImageFilter<TAtlasImageType, TAtlasImageType>;
   typename AtlasRescalerType::Pointer atlasRescaler = AtlasRescalerType::New();
 
   imageRescaler->SetInput( m_PatientImage );
@@ -226,17 +226,13 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
 //  std::cout << "Doing initial rigid mask alignment" << std::endl;
 
-  typedef itk::VersorRigid3DTransform<double>  TransformType;
-  typedef itk::VersorRigid3DTransformOptimizer OptimizerType;
-  typedef itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType>
-                                               MetricType;
-  typedef itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType>
-                                               MultiResRegistrationType;
-  typedef itk::LinearInterpolateImageFunction<TAtlasImageType, double>
-                                               LinearInterpolatorType;
-  typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double>
-                                               NNInterpolatorType;
-//  typedef itk::LabelImageGaussianInterpolateImageFunction<TAtlasLabelType, double> NNInterpolatorType;
+  using TransformType = itk::VersorRigid3DTransform<double>;
+  using OptimizerType = itk::VersorRigid3DTransformOptimizer;
+  using MetricType = itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType>;
+  using MultiResRegistrationType = itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType>;
+  using LinearInterpolatorType = itk::LinearInterpolateImageFunction<TAtlasImageType, double>;
+  using NNInterpolatorType = itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double>;
+//  using NNInterpolatorType = itk::LabelImageGaussianInterpolateImageFunction<TAtlasLabelType, double>;
 
   typename TransformType::Pointer  transform = TransformType::New();
   typename OptimizerType::Pointer optimizer = OptimizerType::New();
@@ -268,7 +264,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   registration->SetMovingImage( m_AtlasImage );
 
   // transform initialization
-  typedef itk::CenteredTransformInitializer<TransformType, TImageType, TAtlasImageType> TransformInitializerType;
+  using TransformInitializerType = itk::CenteredTransformInitializer<TransformType, TImageType, TAtlasImageType>;
   typename TransformInitializerType::Pointer initializer = TransformInitializerType::New();
 
   initializer->SetTransform( transform );
@@ -289,7 +285,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
   registration->SetInitialTransformParameters( transform->GetParameters() );
 
-  typedef OptimizerType::ScalesType OptimizerScalesType;
+  using OptimizerScalesType = OptimizerType::ScalesType;
   OptimizerScalesType optimizerScales( transform->GetNumberOfParameters() );
   const double scale = 1.0;
   const double translationScale = scale/2500;
@@ -323,7 +319,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   transform->SetParameters( finalParameters );
 
   // resample atlas image
-  typedef itk::ResampleImageFilter<TAtlasImageType, TAtlasImageType> ResampleImageFilterType;
+  using ResampleImageFilterType = itk::ResampleImageFilter<TAtlasImageType, TAtlasImageType>;
   typename ResampleImageFilterType::Pointer imageResampler = ResampleImageFilterType::New();
 
   typename TransformType::Pointer finalTransform = TransformType::New();
@@ -356,7 +352,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   m_AtlasImage->DisconnectPipeline();
 
   // resample atlas mask
-  typedef itk::ResampleImageFilter<TAtlasLabelType, TAtlasLabelType> ResampleLabelFilterType;
+  using ResampleLabelFilterType = itk::ResampleImageFilter<TAtlasLabelType, TAtlasLabelType>;
   typename ResampleLabelFilterType::Pointer labelResampler = ResampleLabelFilterType::New();
 
   labelResampler->SetTransform( finalTransform );
@@ -393,16 +389,12 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
 //  std::cout << "Doing affine mask alignment" << std::endl;
 
-  typedef itk::AffineTransform<double,3>           TransformType;
-  typedef itk::RegularStepGradientDescentOptimizer OptimizerType;
-  typedef itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType>
-                                                    MetricType;
-  typedef itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType>
-                                                    MultiResRegistrationType;
-  typedef itk::LinearInterpolateImageFunction<TAtlasImageType, double>
-                                                    LinearInterpolatorType;
-  typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double>
-                                                    NNInterpolatorType;
+  using TransformType = itk::AffineTransform<double,3>;
+  using OptimizerType = itk::RegularStepGradientDescentOptimizer;
+  using MetricType = itk::MattesMutualInformationImageToImageMetric<TImageType, TAtlasImageType>;
+  using MultiResRegistrationType = itk::MultiResolutionImageRegistrationMethod<TImageType, TAtlasImageType>;
+  using LinearInterpolatorType = itk::LinearInterpolateImageFunction<TAtlasImageType, double>;
+  using NNInterpolatorType = itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double>;
 
   typename TransformType::Pointer  transform = TransformType::New();
   typename OptimizerType::Pointer optimizer = OptimizerType::New();
@@ -436,7 +428,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   transform->SetIdentity();
   registration->SetInitialTransformParameters( transform->GetParameters() );
 
-  typedef OptimizerType::ScalesType OptimizerScalesType;
+  using OptimizerScalesType = OptimizerType::ScalesType;
   OptimizerScalesType optimizerScales( transform->GetNumberOfParameters() );
   const double matrixScale = 1.0;
   const double translationScale = matrixScale/200;
@@ -476,7 +468,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   transform->SetParameters( finalParameters );
 
   // resample atlas image
-  typedef itk::ResampleImageFilter<TAtlasImageType, TAtlasImageType> ResampleImageFilterType;
+  using ResampleImageFilterType = itk::ResampleImageFilter<TAtlasImageType, TAtlasImageType>;
   typename ResampleImageFilterType::Pointer imageResampler = ResampleImageFilterType::New();
 
   typename TransformType::Pointer finalTransform = TransformType::New();
@@ -509,7 +501,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   m_AtlasImage->DisconnectPipeline();
 
   // resample atlas mask
-  typedef itk::ResampleImageFilter<TAtlasLabelType, TAtlasLabelType> ResampleLabelFilterType;
+  using ResampleLabelFilterType = itk::ResampleImageFilter<TAtlasLabelType, TAtlasLabelType>;
   typename ResampleLabelFilterType::Pointer labelResampler = ResampleLabelFilterType::New();
 
   labelResampler->SetTransform( finalTransform );
@@ -556,8 +548,8 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
     }
 
   // erode binary mask
-  typedef itk::BinaryBallStructuringElement<typename AtlasLabelType::PixelType, 3> StructuringElementType;
-  typedef itk::BinaryErodeImageFilter<AtlasLabelType, AtlasLabelType, StructuringElementType> ErodeFilterType;
+  using StructuringElementType = itk::BinaryBallStructuringElement<typename AtlasLabelType::PixelType, 3>;
+  using ErodeFilterType = itk::BinaryErodeImageFilter<AtlasLabelType, AtlasLabelType, StructuringElementType>;
   StructuringElementType structuringElement;
   typename ErodeFilterType::Pointer eroder = ErodeFilterType::New();
 
@@ -613,14 +605,14 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   // resample to isoSpacing before applying level set
 
   // resample patient image
-  typedef itk::ResampleImageFilter<ImageType, ImageType> ImageResamplerType;
+  using ImageResamplerType = itk::ResampleImageFilter<ImageType, ImageType>;
   typename ImageResamplerType::Pointer imageResampler = ImageResamplerType::New();
 
-  typedef itk::IdentityTransform<double, 3> TransformType;
+  using TransformType = itk::IdentityTransform<double, 3>;
   typename TransformType::Pointer transform = TransformType::New();
 
-  typedef itk::LinearInterpolateImageFunction<ImageType, double> LinearInterpolatorType;
-  typedef itk::NearestNeighborInterpolateImageFunction<AtlasLabelType, double> NNInterpolatorType;
+  using LinearInterpolatorType = itk::LinearInterpolateImageFunction<ImageType, double>;
+  using NNInterpolatorType = itk::NearestNeighborInterpolateImageFunction<AtlasLabelType, double>;
   typename LinearInterpolatorType::Pointer linearInterpolator = LinearInterpolatorType::New();
   typename NNInterpolatorType::Pointer nnInterpolator = NNInterpolatorType::New();
 
@@ -661,7 +653,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
 
   // resample mask
-  typedef itk::ResampleImageFilter<AtlasLabelType, AtlasLabelType> LabelResamplerType;
+  using LabelResamplerType = itk::ResampleImageFilter<AtlasLabelType, AtlasLabelType>;
   typename LabelResamplerType::Pointer labelResampler = LabelResamplerType::New();
 
   labelResampler->SetTransform( transform );
@@ -706,12 +698,12 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   // refine brain mask using geodesic active contour level set evolution
 
   // have to cast images to float first for level-set
-  typedef itk::Image<float, 3> FloatImageType;
+  using FloatImageType = itk::Image<float, 3>;
 
-  typedef itk::CastImageFilter<ImageType, FloatImageType> ImageCasterType;
+  using ImageCasterType = itk::CastImageFilter<ImageType, FloatImageType>;
   typename ImageCasterType::Pointer imageCaster = ImageCasterType::New();
 
-  typedef itk::CastImageFilter<AtlasLabelType, FloatImageType> LabelCasterType;
+  using LabelCasterType = itk::CastImageFilter<AtlasLabelType, FloatImageType>;
   typename LabelCasterType::Pointer labelCaster = LabelCasterType::New();
 
   imageCaster->SetInput(m_PatientImage);
@@ -732,11 +724,11 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
     }
 
   // Geodesic Active Contour level set settings
-  typedef itk::GradientAnisotropicDiffusionImageFilter<FloatImageType, FloatImageType>  SmoothingFilterType;
-  typedef itk::GradientMagnitudeRecursiveGaussianImageFilter<FloatImageType, FloatImageType>  GradientMagFilterType;
-  typedef itk::RescaleIntensityImageFilter<FloatImageType, FloatImageType> RescalerType;
-  typedef itk::SigmoidImageFilter<FloatImageType, FloatImageType> SigmoidFilterType;
-  typedef itk::GeodesicActiveContourLevelSetImageFilter<FloatImageType, FloatImageType> GeodesicActiveContourFilterType;
+  using SmoothingFilterType = itk::GradientAnisotropicDiffusionImageFilter<FloatImageType, FloatImageType>;
+  using GradientMagFilterType = itk::GradientMagnitudeRecursiveGaussianImageFilter<FloatImageType, FloatImageType>;
+  using RescalerType = itk::RescaleIntensityImageFilter<FloatImageType, FloatImageType>;
+  using SigmoidFilterType = itk::SigmoidImageFilter<FloatImageType, FloatImageType>;
+  using GeodesicActiveContourFilterType = itk::GeodesicActiveContourLevelSetImageFilter<FloatImageType, FloatImageType>;
   typename SmoothingFilterType::Pointer smoothingFilter = SmoothingFilterType::New();
   typename GradientMagFilterType::Pointer gradientMagnitude = GradientMagFilterType::New();
   typename RescalerType::Pointer rescaler = RescalerType::New();
@@ -810,7 +802,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   m_Timer.Stop("6i) Geodesic");
 
   // threshold level set output
-  typedef itk::BinaryThresholdImageFilter<FloatImageType, FloatImageType> ThresholdFilterType;
+  using ThresholdFilterType = itk::BinaryThresholdImageFilter<FloatImageType, FloatImageType>;
   typename ThresholdFilterType::Pointer thresholder = ThresholdFilterType::New();
 
   thresholder->SetUpperThreshold( 0.0 );
@@ -834,7 +826,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
 
   // cast back mask from float to char
-  typedef itk::CastImageFilter<FloatImageType, AtlasLabelType> LabelReCasterType;
+  using LabelReCasterType = itk::CastImageFilter<FloatImageType, AtlasLabelType>;
   typename LabelReCasterType::Pointer labelReCaster = LabelReCasterType::New();
 
   labelReCaster->SetInput(thresholder->GetOutput());
@@ -863,13 +855,13 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 
 //  std::cout << "Generating final brain mask" << std::endl;
 
-  typedef itk::ResampleImageFilter<TAtlasLabelType, TAtlasLabelType> ResamplerType;
+  using ResamplerType = itk::ResampleImageFilter<TAtlasLabelType, TAtlasLabelType>;
   typename ResamplerType::Pointer resampler = ResamplerType::New();
 
-  typedef itk::IdentityTransform<double, 3> TransformType;
+  using TransformType = itk::IdentityTransform<double, 3>;
   typename TransformType::Pointer transform = TransformType::New();
 
-  typedef itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double> NNInterpolatorType;
+  using NNInterpolatorType = itk::NearestNeighborInterpolateImageFunction<TAtlasLabelType, double>;
   typename NNInterpolatorType::Pointer nnInterp = NNInterpolatorType::New();
 
   transform->SetIdentity();

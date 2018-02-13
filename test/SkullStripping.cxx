@@ -55,15 +55,15 @@ int main( int argc, char* argv[] )
   std::string atlasImageFilename = argv[2];
   std::string atlasMaskFilename = argv[3];
 
-  typedef itk::Image<int, 3>           ImageType;
-  typedef itk::Image<short, 3>         AtlasImageType;
-  typedef itk::Image<unsigned char, 3> AtlasLabelType;
+  using ImageType = itk::Image<int, 3>;
+  using AtlasImageType = itk::Image<short, 3>;
+  using AtlasLabelType = itk::Image<unsigned char, 3>;
 
 
   // image reading
-  typedef itk::ImageFileReader<ImageType>      ReaderType;
-  typedef itk::ImageFileReader<AtlasImageType> AtlasReaderType;
-  typedef itk::ImageFileReader<AtlasLabelType> LabelReaderType;
+  using ReaderType = itk::ImageFileReader<ImageType>;
+  using AtlasReaderType = itk::ImageFileReader<AtlasImageType>;
+  using LabelReaderType = itk::ImageFileReader<AtlasLabelType>;
   ReaderType::Pointer reader = ReaderType::New();
   AtlasReaderType::Pointer atlasReader = AtlasReaderType::New();
   LabelReaderType::Pointer labelReader = LabelReaderType::New();
@@ -90,7 +90,7 @@ int main( int argc, char* argv[] )
   std::cout << std::endl << "Performing skull-stripping" << std::endl;
 
   // set up skull-stripping filter
-  typedef itk::StripTsImageFilter<ImageType, AtlasImageType, AtlasLabelType> StripTsFilterType;
+  using StripTsFilterType = itk::StripTsImageFilter<ImageType, AtlasImageType, AtlasLabelType>;
   StripTsFilterType::Pointer stripTsFilter = StripTsFilterType::New();
 
   // set the required inputs for the stripTsImageFilter
@@ -112,7 +112,7 @@ int main( int argc, char* argv[] )
 
 
   // mask the patient image using the output generated from the stripTsImageFilter as mask
-  typedef itk::MaskImageFilter<ImageType, AtlasLabelType, ImageType> MaskFilterType;
+  using MaskFilterType = itk::MaskImageFilter<ImageType, AtlasLabelType, ImageType>;
   MaskFilterType::Pointer maskFilter = MaskFilterType::New();
 
   maskFilter->SetInput1( reader->GetOutput() );
@@ -132,12 +132,12 @@ int main( int argc, char* argv[] )
 
 
   // write mask and masked patient image
-  typedef itk::ImageFileWriter<AtlasLabelType> MaskWriterType;
+  using MaskWriterType = itk::ImageFileWriter<AtlasLabelType>;
   MaskWriterType::Pointer maskWriter = MaskWriterType::New();
   maskWriter->SetInput( stripTsFilter->GetOutput() );
   maskWriter->SetFileName( argv[4] );
 
-  typedef itk::ImageFileWriter<ImageType> ImageWriterType;
+  using ImageWriterType = itk::ImageFileWriter<ImageType>;
   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
   imageWriter->SetInput( maskFilter->GetOutput() );
   imageWriter->SetFileName( argv[5] );

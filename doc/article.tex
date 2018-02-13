@@ -199,7 +199,7 @@ The following excerpt from the \verb skullStripping.cxx  main file shows how to 
 \small
 \begin{verbatim}
 	// set up skull-stripping filter
-	typedef itk::StripTsImageFilter<ImageType, AtlasImageType, AtlasLabelType> StripTsFilterType;
+	using StripTsFilterType = itk::StripTsImageFilter<ImageType, AtlasImageType, AtlasLabelType>;
 	StripTsFilterType::Pointer stripTsFilter = StripTsFilterType::New();
 
 	// set the required inputs for the stripTsImageFilter
@@ -219,7 +219,7 @@ The following excerpt from the \verb skullStripping.cxx  main file shows how to 
 
 
 	// mask the patient image using the output generated from the stripTsImageFilter as mask
-	typedef itk::MaskImageFilter<ImageType, AtlasLabelType, ImageType> MaskFilterType;
+	using MaskFilterType = itk::MaskImageFilter<ImageType, AtlasLabelType, ImageType>;
 	MaskFilterType::Pointer maskFilter = MaskFilterType::New();
 
 	maskFilter->SetInput1( reader->GetOutput() );
