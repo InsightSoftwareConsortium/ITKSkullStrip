@@ -95,6 +95,7 @@ class ITK_EXPORT
 StripTsImageFilter : public ImageToImageFilter<TImageType, TAtlasLabelType>
 {
 public:
+  ITK_DISALLOW_COPY_AND_ASSIGN(StripTsImageFilter);
 
   // standard class type alias
   using Self = StripTsImageFilter;
@@ -144,10 +145,6 @@ protected:
 
 
 private:
-
-  StripTsImageFilter(const Self&); //purposely not implemented
-  void operator=(const Self&); //purposely not implemented
-
   ImagePointer            m_PatientImage;
   AtlasImagePointer       m_AtlasImage;
   AtlasLabelPointer       m_AtlasLabels;
