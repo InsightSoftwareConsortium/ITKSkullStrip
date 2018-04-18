@@ -110,7 +110,7 @@ public:
   itkTypeMacro(StripTsImageFilter, ImageToImageFilter);
 
   // display
-  void PrintSelf( std::ostream& os, Indent indent ) const;
+  void PrintSelf( std::ostream& os, Indent indent ) const override;
 
   // image and label templates
   using ImageType = TImageType;
@@ -141,7 +141,7 @@ protected:
   ~StripTsImageFilter();
 
   // does the real work
-  virtual void GenerateData();
+  void GenerateData() override;
 
 
 private:

@@ -3,13 +3,9 @@ set(SkullStripTests
 SkullStrippingTest.cxx
 )
 
-CreateTestDriver(SkullStrip  "${SkullStrip-Test_LIBRARIES}" "${SkullStripTests}")
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../examples)
 
-# Build the sample application
-set(ITK_NO_IO_FACTORY_REGISTER_MANAGER "")
-include(${ITK_SOURCE_DIR}/CMake/UseITK.cmake)
-add_executable(SkullStripping MACOSX_BUNDLE SkullStripping.cxx )
-target_link_libraries(SkullStripping ${SkullStrip_LIBRARIES})
+CreateTestDriver(SkullStrip  "${SkullStrip-Test_LIBRARIES}" "${SkullStripTests}")
 
 set(TEMP ${ITK_TEST_OUTPUT_DIR})
 set(TEST_DATA_ROOT "${SkullStrip_SOURCE_DIR}/test")
