@@ -34,7 +34,7 @@ StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
   m_PatientImage = ImageType::New();
   m_AtlasImage = AtlasImageType::New();
   m_AtlasLabels = AtlasLabelType::New();
-  m_Progress = ProgressAccumulator::New();
+  m_Progress = nullptr;
   m_TimerReport = "";
 }
 
@@ -51,7 +51,7 @@ void StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>
 {
   // do the processing
 
-  m_Progress->ResetProgress();
+  m_Progress = ProgressAccumulator::New();
   m_Progress->SetMiniPipelineFilter(this);
 
   m_Timer.Start("1 DownsampleImage");
