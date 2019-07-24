@@ -90,8 +90,8 @@ namespace itk
  * \ingroup Segmentation
  */
 
-template <class TImageType, class TAtlasImageType, class TAtlasLabelType>
-class ITK_EXPORT
+template <typename TImageType, typename TAtlasImageType, typename TAtlasLabelType = Image< unsigned char, TAtlasImageType::ImageDimension > >
+class ITK_TEMPLATE_EXPORT
 StripTsImageFilter : public ImageToImageFilter<TImageType, TAtlasLabelType>
 {
 public:
