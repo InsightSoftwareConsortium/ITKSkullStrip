@@ -1,22 +1,19 @@
 itk_module_test()
+
 set(SkullStripTests
-SkullStrippingTest.cxx
-)
+  itkStripTsImageFilterTest.cxx
+  )
 
-include_directories(${CMAKE_CURRENT_SOURCE_DIR}/../examples)
+CreateTestDriver(SkullStrip "${SkullStrip-Test_LIBRARIES}" "${SkullStripTests}")
 
-CreateTestDriver(SkullStrip  "${SkullStrip-Test_LIBRARIES}" "${SkullStripTests}")
-
-set(TEMP ${ITK_TEST_OUTPUT_DIR})
-set(TEST_DATA_ROOT "${SkullStrip_SOURCE_DIR}/test")
-itk_add_test( NAME SkullStrippingTest
+itk_add_test(NAME itkStripTsImageFilterTest
   COMMAND SkullStripTestDriver
-    --compare ${TEST_DATA_ROOT}/Baseline/outputMaskBaseline.mha
-              ${TEMP}/outputMask.mha
-    SkullStrippingTest
-    ${TEST_DATA_ROOT}/Input/brainweb.mha
-    ${TEST_DATA_ROOT}/Input/atlasImage.mha
-    ${TEST_DATA_ROOT}/Input/atlasMask.mha
-    ${TEMP}/outputMask.mha
-    ${TEMP}/outputMaskedImage.mha
-)
+  --compare DATA{Baseline/outputMaskBaseline.mha}
+            ${ITK_TEST_OUTPUT_DIR}/outputMask.mha
+  itkStripTsImageFilterTest
+    DATA{Input/brainweb.mha}
+    DATA{Input/atlasImage.mha}
+    DATA{Input/atlasMask.mha}
+    ${ITK_TEST_OUTPUT_DIR}/outputMask.mha
+    ${ITK_TEST_OUTPUT_DIR}/outputMaskedImage.mha
+  )
