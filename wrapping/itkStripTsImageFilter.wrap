@@ -1,3 +1,4 @@
-itk_wrap_class("itk::SkullStrip" POINTER)
-  itk_wrap_image_filter("${WRAP_ITK_REAL}" 2 2+)
+itk_wrap_class("itk::StripTsImageFilter" POINTER)
+  itk_wrap_image_filter("${WRAP_ITK_SCALAR}" 2 3)
 itk_end_wrap_class()
+
