@@ -764,7 +764,7 @@ StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>::LevelSetRefine
 
 
   geodesicActiveContour->SetIsoSurfaceValue(0.5);
-  geodesicActiveContour->SetUseImageSpacing(1);
+  geodesicActiveContour->SetUseImageSpacing(true);
 
   // set parameters depending on coarse or fine isotropic resolution
   if (isoSpacing == 2)
