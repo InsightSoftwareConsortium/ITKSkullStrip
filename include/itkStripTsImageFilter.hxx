@@ -38,8 +38,7 @@ StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>::StripTsImageFi
 }
 
 template <class TImageType, class TAtlasImageType, class TAtlasLabelType>
-StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>::~StripTsImageFilter()
-{}
+StripTsImageFilter<TImageType, TAtlasImageType, TAtlasLabelType>::~StripTsImageFilter() = default;
 
 
 template <class TImageType, class TAtlasImageType, class TAtlasLabelType>
