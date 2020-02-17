@@ -36,7 +36,7 @@ itkStripTsImageFilterTest(int argc, char * argv[])
     return EXIT_FAILURE;
   }
 
-  double startTime = time(0);
+  double startTime = time(nullptr);
 
 
   std::string patientImageFilename = argv[1];
@@ -114,7 +114,7 @@ itkStripTsImageFilterTest(int argc, char * argv[])
   TRY_EXPECT_NO_EXCEPTION(imageWriter->Update());
 
 
-  double endTime = time(0);
+  double endTime = time(nullptr);
   std::cout << "Total computation time: " << endTime - startTime << " seconds" << std::endl;
   std::cout << stripTsFilter->GetTimerReport();
 
