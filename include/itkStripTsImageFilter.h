@@ -142,7 +142,7 @@ public:
 
 protected:
   StripTsImageFilter();
-  ~StripTsImageFilter();
+  ~StripTsImageFilter() override;
 
   // does the real work
   void
