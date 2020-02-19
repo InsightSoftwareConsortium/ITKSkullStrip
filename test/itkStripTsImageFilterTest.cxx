@@ -25,15 +25,14 @@
 #include <ctime>
 
 
-int itkStripTsImageFilterTest( int argc, char* argv[] )
+int
+itkStripTsImageFilterTest(int argc, char * argv[])
 {
-  if( argc < 6 )
+  if (argc < 6)
   {
     std::cerr << "Missing parameters." << std::endl;
-    std::cerr << "Usage: " << argv[0]
-              << " patientImageFile atlasImageFile atlasMaskFile"
-              << " outputMask outputPatientMask"
-              << std::endl;
+    std::cerr << "Usage: " << argv[0] << " patientImageFile atlasImageFile atlasMaskFile"
+              << " outputMask outputPatientMask" << std::endl;
     return EXIT_FAILURE;
   }
 
@@ -52,23 +51,23 @@ int itkStripTsImageFilterTest( int argc, char* argv[] )
   // Read input images
   using ReaderType = itk::ImageFileReader<ImageType>;
   ReaderType::Pointer reader = ReaderType::New();
-  reader->SetFileName( patientImageFilename );
+  reader->SetFileName(patientImageFilename);
 
-  TRY_EXPECT_NO_EXCEPTION( reader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
   using AtlasReaderType = itk::ImageFileReader<AtlasImageType>;
   AtlasReaderType::Pointer atlasReader = AtlasReaderType::New();
-  atlasReader->SetFileName( atlasImageFilename );
+  atlasReader->SetFileName(atlasImageFilename);
 
-  TRY_EXPECT_NO_EXCEPTION( atlasReader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(atlasReader->Update());
 
 
   using LabelReaderType = itk::ImageFileReader<AtlasLabelType>;
   LabelReaderType::Pointer labelReader = LabelReaderType::New();
-  labelReader->SetFileName( atlasMaskFilename );
+  labelReader->SetFileName(atlasMaskFilename);
 
-  TRY_EXPECT_NO_EXCEPTION( labelReader->Update() );
+  TRY_EXPECT_NO_EXCEPTION(labelReader->Update());
 
 
   // Perform skull-stripping using stripTsImageFilter
@@ -78,46 +77,45 @@ int itkStripTsImageFilterTest( int argc, char* argv[] )
   using StripTsFilterType = itk::StripTsImageFilter<ImageType, AtlasImageType, AtlasLabelType>;
   StripTsFilterType::Pointer stripTsFilter = StripTsFilterType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS( stripTsFilter, StripTsImageFilter, ImageToImageFilter );
+  EXERCISE_BASIC_OBJECT_METHODS(stripTsFilter, StripTsImageFilter, ImageToImageFilter);
 
   // Set the required inputs for the stripTsImageFilter
-  stripTsFilter->SetInput( reader->GetOutput() );
-  stripTsFilter->SetAtlasImage( atlasReader->GetOutput() );
-  stripTsFilter->SetAtlasBrainMask( labelReader->GetOutput() );
+  stripTsFilter->SetInput(reader->GetOutput());
+  stripTsFilter->SetAtlasImage(atlasReader->GetOutput());
+  stripTsFilter->SetAtlasBrainMask(labelReader->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION( stripTsFilter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(stripTsFilter->Update());
 
 
   // Mask the patient image using the output generated from the stripTsImageFilter as mask
   using MaskFilterType = itk::MaskImageFilter<ImageType, AtlasLabelType, ImageType>;
   MaskFilterType::Pointer maskFilter = MaskFilterType::New();
 
-  maskFilter->SetInput1( reader->GetOutput() );
-  maskFilter->SetInput2( stripTsFilter->GetOutput() );
+  maskFilter->SetInput1(reader->GetOutput());
+  maskFilter->SetInput2(stripTsFilter->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION( maskFilter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(maskFilter->Update());
 
 
   // Write mask and masked patient image
   using MaskWriterType = itk::ImageFileWriter<AtlasLabelType>;
   MaskWriterType::Pointer maskWriter = MaskWriterType::New();
-  maskWriter->SetInput( stripTsFilter->GetOutput() );
-  maskWriter->SetFileName( argv[4] );
+  maskWriter->SetInput(stripTsFilter->GetOutput());
+  maskWriter->SetFileName(argv[4]);
 
-  TRY_EXPECT_NO_EXCEPTION( maskWriter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(maskWriter->Update());
 
 
   using ImageWriterType = itk::ImageFileWriter<ImageType>;
   ImageWriterType::Pointer imageWriter = ImageWriterType::New();
-  imageWriter->SetInput( maskFilter->GetOutput() );
-  imageWriter->SetFileName( argv[5] );
+  imageWriter->SetInput(maskFilter->GetOutput());
+  imageWriter->SetFileName(argv[5]);
 
-  TRY_EXPECT_NO_EXCEPTION( imageWriter->Update() );
+  TRY_EXPECT_NO_EXCEPTION(imageWriter->Update());
 
 
   double endTime = time(0);
-  std::cout << "Total computation time: "
-            << endTime-startTime << " seconds" << std::endl;
+  std::cout << "Total computation time: " << endTime - startTime << " seconds" << std::endl;
   std::cout << stripTsFilter->GetTimerReport();
 
 
