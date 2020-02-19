@@ -90,16 +90,17 @@ namespace itk
  * \ingroup Segmentation
  */
 
-template <typename TImageType, typename TAtlasImageType, typename TAtlasLabelType = Image< unsigned char, TAtlasImageType::ImageDimension > >
-class ITK_TEMPLATE_EXPORT
-StripTsImageFilter : public ImageToImageFilter<TImageType, TAtlasLabelType>
+template <typename TImageType,
+          typename TAtlasImageType,
+          typename TAtlasLabelType = Image<unsigned char, TAtlasImageType::ImageDimension>>
+class ITK_TEMPLATE_EXPORT StripTsImageFilter : public ImageToImageFilter<TImageType, TAtlasLabelType>
 {
 public:
   ITK_DISALLOW_COPY_AND_ASSIGN(StripTsImageFilter);
 
   // standard class type alias
   using Self = StripTsImageFilter;
-  using Superclass = ImageToImageFilter<TImageType,TAtlasLabelType>;
+  using Superclass = ImageToImageFilter<TImageType, TAtlasLabelType>;
   using Pointer = SmartPointer<Self>;
   using ConstPointer = SmartPointer<const Self>;
 
@@ -110,7 +111,8 @@ public:
   itkTypeMacro(StripTsImageFilter, ImageToImageFilter);
 
   // display
-  void PrintSelf( std::ostream& os, Indent indent ) const override;
+  void
+  PrintSelf(std::ostream & os, Indent indent) const override;
 
   // image and label templates
   using ImageType = TImageType;
@@ -127,21 +129,24 @@ public:
 
   using ProgressPointer = typename ProgressAccumulator::Pointer;
 
-  void SetAtlasImage( const TAtlasImageType * ptr );
-  void SetAtlasBrainMask( const TAtlasLabelType * ptr );
+  void
+  SetAtlasImage(const TAtlasImageType * ptr);
+  void
+  SetAtlasBrainMask(const TAtlasLabelType * ptr);
 
-  const std::string &GetTimerReport() const
+  const std::string &
+  GetTimerReport() const
   {
     return m_TimerReport;
   }
 
 protected:
-
   StripTsImageFilter();
   ~StripTsImageFilter();
 
   // does the real work
-  void GenerateData() override;
+  void
+  GenerateData() override;
 
 
 private:
@@ -152,23 +157,33 @@ private:
   TimeProbesCollectorBase m_Timer;
   std::string             m_TimerReport;
 
-  void RescaleImages();
-  void DownsampleImage();
-  void RigidRegistration();
-  void AffineRegistration();
-  void BinaryErosion();
-  void MultiResLevelSet();
-  void PyramidFilter(int isoSpacing);
-  void InversePyramidFilter();
-  void LevelSetRefinement(int isoSpacing);
-  void UpsampleLabels();
+  void
+  RescaleImages();
+  void
+  DownsampleImage();
+  void
+  RigidRegistration();
+  void
+  AffineRegistration();
+  void
+  BinaryErosion();
+  void
+  MultiResLevelSet();
+  void
+  PyramidFilter(int isoSpacing);
+  void
+  InversePyramidFilter();
+  void
+  LevelSetRefinement(int isoSpacing);
+  void
+  UpsampleLabels();
 
 }; // end of class
 
 } // end namespace itk
 
 #ifndef ITK_MANUAL_INSTANTIATION
-#include "itkStripTsImageFilter.hxx"
+#  include "itkStripTsImageFilter.hxx"
 #endif
 
 #endif
