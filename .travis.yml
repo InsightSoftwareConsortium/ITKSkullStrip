@@ -11,5 +11,6 @@ script:
 - curl -L https://raw.githubusercontent.com/InsightSoftwareConsortium/ITKPythonPackage/master/scripts/macpython-download-cache-and-build-module-wheels.sh -O
 - chmod u+x macpython-download-cache-and-build-module-wheels.sh
 - ./macpython-download-cache-and-build-module-wheels.sh
-- tar -zcvf dist.tar.gz dist/
-- curl --upload-file dist.tar.gz https://transfer.sh/dist.tar.gz
+- tar -zcvf ./dist.tar.gz dist/
+#FAILS - curl --upload-file ./dist.tar.gz https://transfer.sh/dist.tar.gz
+- echo "TRAVIS TESTING COMPLETE"
