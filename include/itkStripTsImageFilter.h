@@ -96,7 +96,7 @@ template <typename TImageType,
 class ITK_TEMPLATE_EXPORT StripTsImageFilter : public ImageToImageFilter<TImageType, TAtlasLabelType>
 {
 public:
-  ITK_DISALLOW_COPY_AND_ASSIGN(StripTsImageFilter);
+  ITK_DISALLOW_COPY_AND_MOVE(StripTsImageFilter);
 
   // standard class type alias
   using Self = StripTsImageFilter;
