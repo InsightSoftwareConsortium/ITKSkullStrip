@@ -1,6 +1,8 @@
 ITKSkullStripping
 =================
 
+.. image:: https://github.com/InsightSoftwareConsortium/ITKSkullStrip/workflows/Build,%20test,%20package/badge.svg
+
 .. |CircleCI| image:: https://circleci.com/gh/InsightSoftwareConsortium/ITKSkullStrip.svg?style=shield
     :target: https://circleci.com/gh/InsightSoftwareConsortium/ITKSkullStrip
 
