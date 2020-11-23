@@ -49,6 +49,6 @@ setup(
     keywords='ITK InsightToolkit neuroimaging neuroimaging-analysis',
     url=r'https://github.com/InsightSoftwareConsortium/ITKSkullStrip',
     install_requires=[
-        r'itk'
+        r'itk>=5.1.1'
     ]
     )
