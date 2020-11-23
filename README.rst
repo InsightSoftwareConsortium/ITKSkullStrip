@@ -3,21 +3,6 @@ ITKSkullStripping
 
 .. image:: https://github.com/InsightSoftwareConsortium/ITKSkullStrip/workflows/Build,%20test,%20package/badge.svg
 
-.. |CircleCI| image:: https://circleci.com/gh/InsightSoftwareConsortium/ITKSkullStrip.svg?style=shield
-    :target: https://circleci.com/gh/InsightSoftwareConsortium/ITKSkullStrip
-
-.. |TravisCI| image:: https://travis-ci.org/InsightSoftwareConsortium/ITKSkullStrip.svg?branch=master
-    :target: https://travis-ci.org/InsightSoftwareConsortium/ITKSkullStrip
-
-.. |AppVeyor| image:: https://img.shields.io/appveyor/ci/itkrobot/itkskullstrip.svg
-    :target: https://ci.appveyor.com/project/itkrobot/itkskullstrip
-
-=========== =========== ===========
-   Linux      macOS       Windows
-=========== =========== ===========
-|CircleCI|  |TravisCI|  |AppVeyor|
-=========== =========== ===========
-
 
 Overview
 --------
@@ -33,6 +18,12 @@ For more information, see the `Insight Journal article <http://hdl.handle.net/10
   http://hdl.handle.net/10380/3353
   http://www.insight-journal.org/browse/publication/859
 
+Installation
+-------------
+
+::
+
+  pip install itk-skullstripping
 
 License
 -------
