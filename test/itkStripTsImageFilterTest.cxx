@@ -53,21 +53,21 @@ itkStripTsImageFilterTest(int argc, char * argv[])
   ReaderType::Pointer reader = ReaderType::New();
   reader->SetFileName(patientImageFilename);
 
-  TRY_EXPECT_NO_EXCEPTION(reader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(reader->Update());
 
 
   using AtlasReaderType = itk::ImageFileReader<AtlasImageType>;
   AtlasReaderType::Pointer atlasReader = AtlasReaderType::New();
   atlasReader->SetFileName(atlasImageFilename);
 
-  TRY_EXPECT_NO_EXCEPTION(atlasReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(atlasReader->Update());
 
 
   using LabelReaderType = itk::ImageFileReader<AtlasLabelType>;
   LabelReaderType::Pointer labelReader = LabelReaderType::New();
   labelReader->SetFileName(atlasMaskFilename);
 
-  TRY_EXPECT_NO_EXCEPTION(labelReader->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(labelReader->Update());
 
 
   // Perform skull-stripping using stripTsImageFilter
@@ -77,14 +77,14 @@ itkStripTsImageFilterTest(int argc, char * argv[])
   using StripTsFilterType = itk::StripTsImageFilter<ImageType, AtlasImageType, AtlasLabelType>;
   StripTsFilterType::Pointer stripTsFilter = StripTsFilterType::New();
 
-  EXERCISE_BASIC_OBJECT_METHODS(stripTsFilter, StripTsImageFilter, ImageToImageFilter);
+  ITK_EXERCISE_BASIC_OBJECT_METHODS(stripTsFilter, StripTsImageFilter, ImageToImageFilter);
 
   // Set the required inputs for the stripTsImageFilter
   stripTsFilter->SetInput(reader->GetOutput());
   stripTsFilter->SetAtlasImage(atlasReader->GetOutput());
   stripTsFilter->SetAtlasBrainMask(labelReader->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(stripTsFilter->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(stripTsFilter->Update());
 
 
   // Mask the patient image using the output generated from the stripTsImageFilter as mask
@@ -94,7 +94,7 @@ itkStripTsImageFilterTest(int argc, char * argv[])
   maskFilter->SetInput1(reader->GetOutput());
   maskFilter->SetInput2(stripTsFilter->GetOutput());
 
-  TRY_EXPECT_NO_EXCEPTION(maskFilter->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(maskFilter->Update());
 
 
   // Write mask and masked patient image
@@ -103,7 +103,7 @@ itkStripTsImageFilterTest(int argc, char * argv[])
   maskWriter->SetInput(stripTsFilter->GetOutput());
   maskWriter->SetFileName(argv[4]);
 
-  TRY_EXPECT_NO_EXCEPTION(maskWriter->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(maskWriter->Update());
 
 
   using ImageWriterType = itk::ImageFileWriter<ImageType>;
@@ -111,7 +111,7 @@ itkStripTsImageFilterTest(int argc, char * argv[])
   imageWriter->SetInput(maskFilter->GetOutput());
   imageWriter->SetFileName(argv[5]);
 
-  TRY_EXPECT_NO_EXCEPTION(imageWriter->Update());
+  ITK_TRY_EXPECT_NO_EXCEPTION(imageWriter->Update());
 
 
   double endTime = time(nullptr);
