@@ -3,6 +3,13 @@ ITKSkullStripping
 
 .. image:: https://github.com/InsightSoftwareConsortium/ITKSkullStrip/workflows/Build,%20test,%20package/badge.svg
 
+.. image:: https://img.shields.io/pypi/v/itk-skullstripping.svg
+    :target: https://pypi.python.org/pypi/itk-skullstripping
+    :alt: PyPI
+
+.. image:: https://img.shields.io/badge/License-Apache%202.0-blue.svg
+    :target: https://github.com/InsightSoftwareConsortium/ITKSkullStripping/blob/master/LICENSE)
+    :alt: License
 
 Overview
 --------
