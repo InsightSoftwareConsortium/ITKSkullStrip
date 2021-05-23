@@ -13,7 +13,7 @@ except ImportError:
 
 setup(
     name='itk-skullstripping',
-    version='0.0.1',
+    version='0.1.0',
     author='Stefan Bauer',
     author_email='stefan.bauer@istb.unibe.ch',
     packages=['itk'],
@@ -49,6 +49,6 @@ setup(
     keywords='ITK InsightToolkit neuroimaging neuroimaging-analysis',
     url=r'https://github.com/InsightSoftwareConsortium/ITKSkullStrip',
     install_requires=[
-        r'itk>=5.2rc1'
+        r'itk>=5.2.0.post2'
     ]
     )
