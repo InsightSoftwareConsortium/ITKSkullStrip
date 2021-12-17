@@ -20,7 +20,6 @@
 #ifndef itkStripTsImageFilter_hxx
 #define itkStripTsImageFilter_hxx
 
-#include "itkStripTsImageFilter.h"
 #include "itkLabelImageGaussianInterpolateImageFunction.h"
 
 namespace itk
