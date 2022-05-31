@@ -14,16 +14,16 @@ ITKSkullStripping
 Overview
 --------
 
-This is a module for the `Insight Toolkit (ITK) <http://itk.org>`_ that
+This is a module for the `Insight Toolkit (ITK) <https://itk.org>`_ that
 performs automatic skull-stripping for neuroimage analysis.
 
-For more information, see the `Insight Journal article <http://hdl.handle.net/10380/3353>`_::
+For more information, see the `Insight Journal article <https://hdl.handle.net/10380/3353>`_::
 
   Bauer S., Fejes T., Reyes M.
   Skull-Stripping Filter for ITK
   The Insight Journal. January-December. 2012.
-  http://hdl.handle.net/10380/3353
-  http://www.insight-journal.org/browse/publication/859
+  https://hdl.handle.net/10380/3353
+  https://www.insight-journal.org/browse/publication/859
 
 Installation
 -------------

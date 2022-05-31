@@ -25,7 +25,7 @@ setup(
                      'Please refer to:'
                      'Bauer S., Fejes T., Reyes M.,'
                      '“Skull-Stripping Filter for ITK”, '
-                     'Insight Journal, http://hdl.handle.net/10380/3353, 2012.',
+                     'Insight Journal, https://hdl.handle.net/10380/3353, 2012.',
     classifiers=[
         "License :: OSI Approved :: Apache Software License",
         "Programming Language :: Python",
