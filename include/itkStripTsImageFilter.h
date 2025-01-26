@@ -108,7 +108,7 @@ public:
   itkNewMacro(Self);
 
   // run-time type information (and related methods)
-  itkTypeMacro(StripTsImageFilter, ImageToImageFilter);
+  itkOverrideGetNameOfClassMacro(StripTsImageFilter);
 
   // display
   void
